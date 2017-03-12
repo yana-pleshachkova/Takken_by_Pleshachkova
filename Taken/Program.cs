@@ -16,9 +16,9 @@ namespace Taken
 
         public Game(string path) //будем передавать строку (path)
         {
-            string[] lines = System.IO.File.ReadAllLines(path); //@ -безопасная строчка
+            string[] lines = System.IO.File.ReadAllLines(path); 
 
-            string[] array = lines[0].Split(',');
+            string[] array = lines[0].Split(','); //массив строк, каждое число - это строка
 
             if (!(Math.Sqrt(array.Length) % 1 == 0))
             {
@@ -29,7 +29,7 @@ namespace Taken
             }
             else
             {
-                lenX = lenY = (int)Math.Sqrt(array.Length);
+                lenX = lenY = (int)Math.Sqrt(array.Length); 
 
                 Log.Message("Сторона игрового поля = " + lenX);
 
@@ -40,7 +40,7 @@ namespace Taken
                 {
                     for (int j = 0; j < lenY; j++)
                     {
-                        area[i, j] = int.Parse(array[k]);
+                        area[i, j] = int.Parse(array[k]); //int.Parse - преобразует строчку в число
 
                         if (area[i, j] == 0)
                         {
