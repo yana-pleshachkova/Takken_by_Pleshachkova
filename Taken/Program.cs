@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Taken
 {
@@ -7,6 +8,8 @@ namespace Taken
         private int[,] area = null; // Игровое поле
         private int? lenX = null; // Длина X
         private int? lenY = null; // Длина Y
+
+        private Logger Log = new Logger(); // Для вывода информации на экран консоли
 
         public Game(
             int i1, int i2, int i3,
@@ -102,76 +105,48 @@ namespace Taken
             return a;
         }
 
+        private Dictionary<string, int[]> prepareCheckCoords(int x, int y)
+        {
+            Dictionary<string, int[]> retData = new Dictionary<string, int[]>();
+
+            retData.Add("UP", new int[2] { x, y - 1 });
+            retData.Add("RIGHT", new int[2] { x + 1, y });
+            retData.Add("DOWN", new int[2] { x, y + 1 });
+            retData.Add("LEFT", new int[2] { x - 1, y });
+
+            return retData;
+        }
+
         public void Shift(int value) // Перемешение фишки на свободное место
         {
             var coord = GetLocation(value);
             if (coord[0] == -1 || coord[1] == -1) //проверяем, что точка в пределах поля
             {
-                Console.WriteLine("Невозможно совершить перемещение. Такой фишки на поле не существует.");
+                Log.Message("Невозможно совершить перемещение. Такой фишки на поле не существует.");
             }
             else
             {
-                // верхняя координата
-                if (coord[0] - 1 >= 0) //проверяем,есть ли верхние клетки
+                bool isMove = false; // Флаг, для проверки удалось пердвинуть фишку или нет
+
+                foreach(var point in prepareCheckCoords(coord[0], coord[1]))
                 {
-                    int val = this[coord[0] - 1, coord[1]]; //узнаем значение верхней координаты, используя индексатор
-                    if (val == 0) //если верхняя фишка равна нулю
-                    { //то совершаем перемещение
-                        area[coord[0] - 1, coord[1]] = value; //пустой верхней фишке присваиваем значение перемещаемой фишки
+                    int[] val = new int[2] { point.Value[0], point.Value[1] };
+                    if (this[val[0], val[1]] == 0 && !isMove)
+                    {
+                        area[val[0], val[1]] = value; //пустой верхней фишке присваиваем значение перемещаемой фишки
                         area[coord[0], coord[1]] = 0; //перемещаемую фишку делаем пустой, присваивая ноль
 
-                        Console.WriteLine("Перемещено наверх, ({0}, {1})", coord[0] - 1, coord[1]);
+                        Log.PrintAction(point.Key, val[0], val[1]);
 
-                        return;
+                        isMove = true;
                     }
                 }
 
-                // правая координата, теперь проверяем не верхнюю, а праввую
-                if (coord[1] + 1 < lenX)
+                if (!isMove)
                 {
-                    int val = this[coord[0], coord[1] + 1];
-                    if (val == 0)
-                    {
-                        area[coord[0], coord[1] + 1] = value;
-                        area[coord[0], coord[1]] = 0;
-
-                        Console.WriteLine("Перемещено вправо, ({0}, {1})", coord[0] + 1, coord[1]);
-
-                        return;
-                    }
+                    // если все четрые соседние клетки не пустые
+                    Log.Message("Невозможно совершить перемещение. Рядом нет пустой клетки.");
                 }
-
-                // нижняя координата
-                if (coord[0] + 1 < lenY)
-                {
-                    int val = this[coord[0] + 1, coord[1]];
-                    if (val == 0)
-                    {
-                        area[coord[0] + 1, coord[1]] = value;
-                        area[coord[0], coord[1]] = 0;
-
-                        Console.WriteLine("Перемещено вниз, ({0}, {1})", coord[0] + 1, coord[1]);
-
-                        return;
-                    }
-                }
-
-                // левая координата
-                if (coord[1] - 1 >= 0)
-                {
-                    int val = this[coord[0], coord[1] - 1];
-                    if (val == 0)
-                    {
-                        area[coord[0], coord[1] - 1] = value;
-                        area[coord[0], coord[1]] = 0;
-
-                        Console.WriteLine("Перемещено влево, ({0}, {1})", coord[0] - 1, coord[1]);
-
-                        return;
-                    }
-                }
-                // если все четрые соседние клетки не пустые
-                Console.WriteLine("Невозможно совершить перемещение. Рядом нет пустой клетки.");
 
                 return;
             }
