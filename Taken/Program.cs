@@ -10,6 +10,9 @@ namespace Taken
         private int? lenY = null; // Длина Y
 
         private Logger Log = new Logger(); // Для вывода информации на экран консоли
+        private Checker Check = new Checker();
+
+        private int zeroX, zeroY; // Для сохранения координат 0
 
         public Game(
             int i1, int i2, int i3,
@@ -19,6 +22,9 @@ namespace Taken
             area = new int[3, 3]; // Инициализируем поле (задаем размеры)
 
             area[0, 0] = i9;
+            zeroX = 0;
+            zeroY = 0;
+
             area[0, 1] = i1;
             area[0, 2] = i2;
 
@@ -43,6 +49,9 @@ namespace Taken
             area = new int[4, 4];
 
             area[0, 0] = i16;
+            zeroX = 0;
+            zeroY = 0;
+
             area[0, 1] = i1;
             area[0, 2] = i2;
             area[0, 3] = i3;
@@ -105,50 +114,29 @@ namespace Taken
             return a;
         }
 
-        private Dictionary<string, int[]> prepareCheckCoords(int x, int y)
-        {
-            Dictionary<string, int[]> retData = new Dictionary<string, int[]>();
-
-            retData.Add("UP", new int[2] { x, y - 1 });
-            retData.Add("RIGHT", new int[2] { x + 1, y });
-            retData.Add("DOWN", new int[2] { x, y + 1 });
-            retData.Add("LEFT", new int[2] { x - 1, y });
-
-            return retData;
-        }
-
         public void Shift(int value) // Перемешение фишки на свободное место
         {
             var coord = GetLocation(value);
-            if (coord[0] == -1 || coord[1] == -1) //проверяем, что точка в пределах поля
-            {
-                Log.Message("Невозможно совершить перемещение. Такой фишки на поле не существует.");
-            }
-            else
-            {
-                bool isMove = false; // Флаг, для проверки удалось пердвинуть фишку или нет
 
-                foreach(var point in prepareCheckCoords(coord[0], coord[1]))
+            if (Check.CheckField(coord))
+            {
+                int path = (int)Math.Sqrt(Math.Abs(Math.Pow(coord[0] - zeroX, 2) + Math.Pow(coord[1] - zeroY, 2)));
+
+                if (path == 1)
                 {
-                    int[] val = new int[2] { point.Value[0], point.Value[1] };
-                    if (this[val[0], val[1]] == 0 && !isMove)
-                    {
-                        area[val[0], val[1]] = value; //пустой верхней фишке присваиваем значение перемещаемой фишки
-                        area[coord[0], coord[1]] = 0; //перемещаемую фишку делаем пустой, присваивая ноль
+                    area[zeroX, zeroY] = value; // пустой клетке присваиваем значение перемещаемой фишки
+                    area[coord[0], coord[1]] = 0; // перемещаемую фишку делаем пустой, присваивая ноль
 
-                        Log.PrintAction(point.Key, val[0], val[1]);
+                    zeroX = coord[0]; // перезаписываем координаты 0
+                    zeroY = coord[1];
 
-                        isMove = true;
-                    }
+                    Log.Message("Фишка перемещена");
                 }
-
-                if (!isMove)
+                else
                 {
                     // если все четрые соседние клетки не пустые
                     Log.Message("Невозможно совершить перемещение. Рядом нет пустой клетки.");
                 }
-
-                return;
             }
         }
     }
