@@ -14,9 +14,9 @@ namespace Taken
 
         private int zeroX, zeroY; // Для сохранения координат 0
 
-        public Game(string path)
+        public Game(string path) //будем передавать строку (path)
         {
-            string[] lines = System.IO.File.ReadAllLines(@path);
+            string[] lines = System.IO.File.ReadAllLines(path); //@ -безопасная строчка
 
             string[] array = lines[0].Split(',');
 
@@ -25,7 +25,7 @@ namespace Taken
                 lenX = null;
                 lenY = null;
 
-                Log.Message("Задано некорректное поле дляигры.");
+                Log.Message("Задано некорректное поле для игры.");
             }
             else
             {
