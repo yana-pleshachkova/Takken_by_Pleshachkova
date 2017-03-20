@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Taken
 {
-    class Game
+    public class Game
     {
         private int[,] area = null; // Игровое поле
         private int? lenX = null; // Длина X
@@ -13,6 +13,29 @@ namespace Taken
         private Checker Check = new Checker();
 
         private int zeroX, zeroY; // Для сохранения координат 0
+
+        public int[,] Area
+        {
+            get { return area; }
+            set { area = value; }
+        }
+
+        public int Len
+        {
+            get { return (int)lenX; }
+        }
+
+        public int ZeroX
+        {
+            get { return zeroX; }
+            set { zeroX = value; }
+        }
+
+        public int ZeroY
+        {
+            get { return zeroY; }
+            set { zeroY = value; }
+        }
 
         public Game(string path) //будем передавать строку (path)
         {
@@ -138,6 +161,36 @@ namespace Taken
             game.Shift(10); // Если фишки не существует
 
             game.Shift(8); // Рядом с фишкой нет пустой клетки
+
+            Console.ReadLine();
+
+            //================== Проверяем Game 2
+            Game2 game2 = new Game2(PATH_TO_GAME); // Создаем новую игру
+
+            for (int i = 0; i < game2.Len; i++) // Выводим на консоль исходную последовательность
+            {
+                for (int j = 0; j < game2.Len; j++)
+                {
+                    Console.Write(game2.Area[i, j] + " ");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(game2.IsEndGame()); // Проверяем, что позиция выйгрышная - True
+
+            game2.RandomizeStartArea(); // Рандомизируем последовательность
+            Console.WriteLine();
+
+            for (int i = 0; i < game2.Len; i++) // Выводим на консоль рандомизированную последовательность
+            {
+                for (int j = 0; j < game2.Len; j++)
+                {
+                    Console.Write(game2.Area[i, j] + " ");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(game2.IsEndGame()); // Проверяем, что позиция выйгрышная - False
 
             Console.ReadLine();
         }
