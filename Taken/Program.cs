@@ -95,7 +95,7 @@ namespace Taken
             }
         }
 
-        private int[] GetLocation(int value) // Получить координаты элемента
+        public int[] GetLocation(int value) // Получить координаты элемента
         {
             int[] a = new int[2];
             a[0] = -1;
@@ -116,7 +116,7 @@ namespace Taken
             return a;
         }
 
-        public void Shift(int value) // Перемешение фишки на свободное место
+        public virtual void Shift(int value) // Перемешение фишки на свободное место
         {
             var coord = GetLocation(value);
 
@@ -191,6 +191,37 @@ namespace Taken
 
             Console.WriteLine();
             Console.WriteLine(game2.IsEndGame()); // Проверяем, что позиция выйгрышная - False
+
+            Console.ReadLine();
+
+            //================== Проверяем Game 3
+            Game3 game3 = new Game3(PATH_TO_GAME); // Создаем новую игру
+
+            for (int i = 0; i < game3.Len; i++) // Выводим на консоль исходную последовательность
+            {
+                for (int j = 0; j < game3.Len; j++)
+                {
+                    Console.Write(game3.Area[i, j] + " ");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(game3.IsEndGame()); // Проверяем, что позиция выйгрышная - True и работает наследование 
+
+            game3.Shift(0); // Попробуем переместить пустую клетку
+
+            game3.Shift(8); // Переместим фишку рядом с пустой (справа)
+            game3.Shift(8); // Еще раз переместим эту же фишку (слева)
+
+            game3.Shift(6); // Переместим фишку под пустой клетко (наверх)
+            game3.Shift(6); // Переместим еще раз эту же фишку (вниз)
+
+            game3.Shift(10); // Если фишки не существует
+
+            game3.Shift(8); // Рядом с фишкой нет пустой клетки
+
+            Console.WriteLine();
+            game3.PrintLogActions();
 
             Console.ReadLine();
         }
