@@ -13,7 +13,7 @@ namespace Taken
 
         public Game3(string path) : base(path) { }
 
-        public void Shift(int value)
+        public override void Shift(int value)
         {
             var coord = GetLocation(value);
 
