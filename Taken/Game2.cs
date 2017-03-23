@@ -35,25 +35,7 @@ namespace Taken
                 a[j] = t;
             }
 
-            int[,] newArea = new int[this.Len, this.Len];
-            k = 0;
-            for (int i = 0; i < this.Len; i++)
-            {
-                for (int j = 0; j < this.Len; j++)
-                {
-                    newArea[i, j] = a[k];
-
-                    if (a[k] == 0)
-                    {
-                        this.ZeroX = i;
-                        this.ZeroY = j;
-                    }
-
-                    k++;
-                }
-            }
-
-            this.Area = newArea;
+            this.Init(a);
         }
 
         public bool IsEndGame() // Определение выигрыша

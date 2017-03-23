@@ -23,11 +23,26 @@ namespace Taken
 
                 if (path == 1)
                 {
-                    this.Area[this.ZeroX, this.ZeroY] = value; // пустой клетке присваиваем значение перемещаемой фишки
-                    this.Area[coord[0], coord[1]] = 0; // перемещаемую фишку делаем пустой, присваивая ноль
+                    var copyArea = this.Area;
+                    copyArea[this.ZeroX, this.ZeroY] = value;
+                    copyArea[coord[0], coord[1]] = 0;
 
-                    this.ZeroX = coord[0]; // перезаписываем координаты 0
-                    this.ZeroY = coord[1];
+                    int[] arr = new int[this.Len * this.Len];
+                    int k = 0;
+
+                    for (int i = 0; i < this.Len; i++)
+                    {
+                        for (int j = 0; j < this.Len; j++)
+                        {
+                            arr[k] = copyArea[i, j];
+                            k++;
+                        }
+                    }
+
+                    this.Init(arr);
+
+                    copyArea = null;
+                    arr = null;
 
                     Log.Message("Фишка перемещена");
                     Log.SaveAction("Фишка со значением " + value + ", перемещена на  (" + this.ZeroX +  ", " + this.ZeroY + ")");

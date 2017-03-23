@@ -20,7 +20,6 @@ namespace Taken
         public int[,] Area
         {
             get { return area; }
-            set { area = value; }
         }
 
         public int Len
@@ -31,18 +30,15 @@ namespace Taken
         public int ZeroX
         {
             get { return zeroX; }
-            set { zeroX = value; }
         }
 
         public int ZeroY
         {
             get { return zeroY; }
-            set { zeroY = value; }
         }
 
         public Game(string path) //будем передавать строку (path)
         {
-
             var array = Reader.FileReader(path);
             if (!(Math.Sqrt(array.Length) % 1 == 0))
             {
@@ -57,23 +53,28 @@ namespace Taken
 
                 Log.Message("Сторона игрового поля = " + lenX);
 
-                area = new int[(int)lenX, (int)lenY]; // Инициализируем поле (задаем размеры)
-                int k = 0;
+                Init(array);
+            }
+        }
 
-                for (int i = 0; i < lenX; i++)
+        public void Init(int[] array)
+        {
+            area = new int[(int)lenX, (int)lenY]; // Инициализируем поле (задаем размеры)
+            int k = 0;
+
+            for (int i = 0; i < lenX; i++)
+            {
+                for (int j = 0; j < lenY; j++)
                 {
-                    for (int j = 0; j < lenY; j++)
+                    area[i, j] = array[k]; //int.Parse - преобразует строчку в число
+
+                    if (area[i, j] == 0)
                     {
-                        area[i, j] = array[k]; //int.Parse - преобразует строчку в число
-
-                        if (area[i, j] == 0)
-                        {
-                            zeroX = i;
-                            zeroY = j;
-                        }
-
-                        k++;
+                        zeroX = i;
+                        zeroY = j;
                     }
+
+                    k++;
                 }
             }
         }
