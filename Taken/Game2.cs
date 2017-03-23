@@ -38,6 +38,7 @@ namespace Taken
             this.Init(a);
         }
 
+
         public bool IsEndGame() // Определение выигрыша
         {
             int i, j, k = 1;

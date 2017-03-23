@@ -34,7 +34,7 @@ namespace Taken
                     {
                         for (int j = 0; j < this.Len; j++)
                         {
-                            arr[k] = copyArea[i, j];
+                            arr[k] = copyArea[i, j]; //создаем вспомогательный массив, чтобы через него изменять игровое поле после перемещения
                             k++;
                         }
                     }
